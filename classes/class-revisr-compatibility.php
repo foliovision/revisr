@@ -98,7 +98,6 @@ class Revisr_Compatibility {
 		$return .= 'Git Version:              ' . revisr()->git->version() . "\n";
 
 		$return .= 'Git Install Path:         ' . Revisr_Compatibility::guess_path( 'git' ) . "\n";
-		$return .= 'MySQL Install Path:       ' . Revisr_Compatibility::guess_path( 'mysql' ) . "\n";
 
 		$return .= 'Server Software:          ' . $_SERVER['SERVER_SOFTWARE'] . "\n";
 		$return .= 'Server User:              ' . Revisr_Compatibility::get_user() . "\n";
