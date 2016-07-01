@@ -62,14 +62,11 @@ class Revisr_DB {
 		// An empty status array to update later.
 		$status 	= array();
 
-		// Whether we're using MySQL, WPDB, or maybe even something else.
-		$driver 	= $this->get_driver();
-
 		// Builds the name of the class to construct.
 		$class 		= 'Revisr_DB_' . $action;
 
 		// Builds the name of the method to call.
-		$method 	= $action . '_table_' . $driver;
+		$method 	= $action . '_table';
 
 		// The tables we want to run the action on.
 		$tables 	= $tables ? $tables : $this->get_tracked_tables();
@@ -92,24 +89,6 @@ class Revisr_DB {
 
 		}
 
-	}
-
-	/**
-	 * Returns the database method being used.
-	 * @access private
-	 * @return string
-	 */
-	private function get_driver() {
-		return revisr()->git->get_config( 'revisr', 'db-driver' ) ? revisr()->git->get_config( 'revisr', 'db-driver' ) : 'mysql';
-	}
-
-	/**
-	 * Returns the path to MySQL.
-	 * @access protected
-	 * @return string
-	 */
-	protected function get_path() {
-		return revisr()->git->get_config( 'revisr', 'mysql-path' ) ? revisr()->git->get_config( 'revisr', 'mysql-path' ) : '';
 	}
 
 	/**
@@ -204,52 +183,6 @@ class Revisr_DB {
 	}
 
 	/**
-	 * Builds the connection string to use with MySQL.
-	 * @access protected
-	 * @param  string $table Optionally pass the table to use.
-	 * @return string
-	 */
-	protected function build_conn( $table = '' ) {
-
-		// Allow using the port or socket from the DB_HOST constant.
-		$port_or_socket = $this->check_port_or_socket( DB_HOST );
-		$add_port 		= '';
-		$add_socket 	= '';
-		$db_host 		= DB_HOST;
-
-		if ( false !== $port_or_socket ) {
-
-			if ( null !== $port_or_socket['socket'] ) {
-				$socket 	= $port_or_socket['socket'];
-				$add_socket = " --socket=$socket";
-				$temp 		= strlen( $socket ) * -1 - 1;
-			} else {
-				$port 		= $port_or_socket['port'];
-				$add_port 	= " --port=$port";
-				$temp 		= strlen( $port ) * -1 - 1;
-			}
-
-			$db_host = substr( DB_HOST, 0, $temp );
-
-		}
-
-		// Maybe connect to a specific table.
-		if ( '' !== $table ) {
-			$table = ' ' . Revisr_Admin::escapeshellarg( $table );
-		}
-
-		// Workaround for compatibility between UNIX and Windows.
-		if ( '' !== DB_PASSWORD ) {
-			$conn = "-u " . Revisr_Admin::escapeshellarg( DB_USER ) . " -p" . Revisr_Admin::escapeshellarg( DB_PASSWORD ) . " " . DB_NAME . $table . " --host " . $db_host . $add_port . $add_socket;
-		} else {
-			$conn = "-u " . Revisr_Admin::escapeshellarg( DB_USER ) . " " . DB_NAME . $table . " --host " . $db_host . $add_port . $add_socket;
-		}
-
-		// Return the connection string.
-		return $conn;
-	}
-
-	/**
 	 * Creates the backup folder and adds the .htaccess if necessary.
 	 * @access private
 	 */
@@ -273,47 +206,6 @@ class Revisr_DB {
 			$index_content = '<?php // Silence is golden' . PHP_EOL;
 			file_put_contents( $this->backup_dir . '/index.php', $index_content );
 		}
-	}
-
-	/**
-	 * Checks if a given DB_HOST parameter is using a port or socket.
-	 *
-	 * Adapated from WordPress core.
-	 *
-	 * @access public
-	 * @param  string $url The URL to check.
-	 * @return array|boolean
-	 */
-	public function check_port_or_socket( $url ) {
-
-		// Initialize the defaults.
-		$port 			= null;
-		$socket 		= null;
-		$host 			= $url;
-		$port_or_socket = strrchr( $host, ':' );
-
-		if ( ! empty( $port_or_socket ) ) {
-
-			$port_or_socket = substr( $port_or_socket, 1);
-
-			if ( 0 !== strpos( $port_or_socket, '/' ) ) {
-
-				$port 			= intval( $port_or_socket );
-				$maybe_socket 	= strstr( $port_or_socket, ':' );
-
-				if ( ! empty( $maybe_socket ) ) {
-					$socket = substr( $maybe_socket, 1 );
-				}
-			} else {
-				$socket = $port_or_socket;
-			}
-		}
-
-		if ( null === $port && null === $socket ) {
-			return false;
-		}
-
-		return array( 'port' => $port, 'socket' => $socket );
 	}
 
 	/**

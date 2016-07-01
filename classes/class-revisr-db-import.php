@@ -16,50 +16,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class Revisr_DB_Import extends Revisr_DB {
 
 	/**
-	 * Imports a single database table using MySQL directly.
-	 * @access public
-	 * @param  string $table The table to import
-	 * @return boolean Whether it was successful.
-	 */
-	public function import_table_mysql( $table, $replace_url = '' ) {
-
-		// Build the connection to use with MySQL.
-		$conn = $this->build_conn();
-
-		// Grab the path to use for MySQL.
-		$path = $this->get_path();
-
-		// Grab the site url.
-		$live_url = site_url();
-
-		// Import the table.
-		$current_dir = getcwd();
-		chdir( $this->backup_dir );
-		exec( "{$path}mysql {$conn} < revisr_$table.sql", $output, $return_code );
-		chdir( $current_dir );
-
-		// Handle any errors.
-		if ( 0 !== $return_code ) {
-			Revisr_Admin::log( implode( '<br>', $output ), 'error' );
-			return false;
-		}
-
-		// Run a search replace if necessary.
-		if ( $replace_url !== '' && $replace_url !== false ) {
-			$this->revisr_srdb( $table, $replace_url, $live_url );
-		}
-
-		// If we're still running at this point, everything worked.
-		return true;
-	}
-
-	/**
 	 * Imports a single database table using the WordPress database class.
 	 * @access public
 	 * @param  string $table The table to import
 	 * @return array  An array of the results.
 	 */
-	public function import_table_wpdb( $table, $replace_url = '' ) {
+	public function import_table( $table, $replace_url = '' ) {
 
 		$live_url 	= site_url();
 		$fh 		= fopen( "{$this->backup_dir}revisr_$table.sql", 'r' );

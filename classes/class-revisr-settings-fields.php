@@ -478,64 +478,6 @@ class Revisr_Settings_Fields {
 	}
 
 	/**
-	 * Displays/updates the "DB Driver" settings field.
-	 * @access public
-	 */
-	public function db_driver_callback() {
-		if ( $this->is_updated( 'db_driver' ) ) {
-			revisr()->git->set_config( 'revisr', 'db-driver', revisr()->options['db_driver'] );
-		}
-
-		$current = revisr()->git->get_config( 'revisr', 'db-driver' );
-
-		?>
-		<select id="db-driver-select" name="revisr_database_settings[db_driver]">
-			<option value="mysql" <?php selected( 'mysql', $current ); ?>><?php _e( 'MySQL', 'revisr' ); ?></option>
-			<option value="wpdb" <?php selected( 'wpdb', $current ); ?>><?php _e( 'WordPress', 'revisr' ); ?></option>
-		</select>
-		<p class="description"><?php _e( 'MySQL can be faster, but may not be available on some servers.', 'revisr' ); ?></p>
-
-		<?php
-
-	}
-
-	/**
-	 * Displays/updates the "Path to MySQL" settings field.
-	 * @access public
-	 */
-	public function mysql_path_callback() {
-		if ( isset( $_GET['settings-updated'] ) ) {
-			if ( $this->is_updated( 'mysql_path' ) ) {
-
-				// Properly escape trailing backslashes on Windows.
-				if ( substr( revisr()->options['mysql_path'], -1 ) === '\\' ) {
-					revisr()->options['mysql_path'] .= '\\';
-				}
-
-				revisr()->git->set_config( 'revisr', 'mysql-path', revisr()->options['mysql_path'] );
-
-			} else {
-				revisr()->git->run( 'config', array( '--unset', 'revisr.mysql-path' ) );
-			}
-		}
-
-		if ( $get_path = revisr()->git->get_config( 'revisr', 'mysql-path' ) ) {
-			$mysql_path = $get_path;
-		} else {
-			$mysql_path = '';
-		}
-
-		printf(
-			'<input type="text" id="mysql_path" name="revisr_database_settings[mysql_path]" value="%s" class="regular-text revisr-text" placeholder="" />
-			<p class="description revisr-description">%s</p>',
-			esc_attr( $mysql_path ),
-			__( 'Leave blank if the full path to MySQL has already been set on the server. Some possible settings include:
-			<br><br>For MAMP: /Applications/MAMP/Library/bin/<br>
-			For WAMP: C:\wamp\bin\mysql\mysql5.6.12\bin\ ', 'revisr' )
-		);
-	}
-
-	/**
 	 * Displays/updates the "Reset DB" settings field.
 	 * @access public
 	 */

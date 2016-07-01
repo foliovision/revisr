@@ -16,45 +16,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class Revisr_DB_Backup extends Revisr_DB {
 
 	/**
-	 * Backs up a single database table using mysqldump.
-	 * @access public
-	 * @param  string $table The database table to backup.
-	 * @return array  An array of the results.
-	 */
-	public function backup_table_mysql( $table ) {
-
-		// Build the connection to use with mysqldump.
-		$conn = $this->build_conn( $table );
-
-		// Grab the path to use for mysqldump.
-		$path = $this->get_path();
-
-		// Backup the table.
-		$current_dir = getcwd();
-		chdir( $this->backup_dir );
-		exec( "{$path}mysqldump $conn > revisr_$table.sql --skip-comments", $output, $return_code );
-		chdir( $current_dir );
-
-		// Handle any errors
-		if ( 0 !== $return_code ) {
-			return false;
-		}
-
-		// Add the table into version control.
-		$this->add_table( $table );
-
-		// Makes sure that the backup file exists and is not empty.
-		return $this->verify_backup( $table );
-
-	}
-
-	/**
 	 * Backs up a single database table using the WordPress database class.
 	 * @access public
 	 * @param  string $table The database table to backup.
 	 * @return boolean
 	 */
-	public function backup_table_wpdb( $table ) {
+	public function backup_table( $table ) {
 
 		$table 			= esc_sql( $table );
 
