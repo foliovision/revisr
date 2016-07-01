@@ -27,7 +27,7 @@ delete_transient( 'revisr_skip_setup' );
 
 			<input type="hidden" name="page" value="revisr_setup" />
 
-			<h2><div class="revisr-arrow-logo"></div><?php _e( 'Revisr - Installation', 'revisr' ); ?></h2>
+			<h1><div class="revisr-arrow-logo"></div><?php _e( 'Revisr - Installation', 'revisr' ); ?></h1>
 
 			<?php if ( revisr()->git->is_repo ): ?>
 
