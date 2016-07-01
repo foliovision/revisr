@@ -26,20 +26,11 @@ class Revisr_DB_Import_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests the Revisr_DB_Import->import_table_mysql method.
+	 * Tests the Revisr_DB_Import->import_table() method.
 	 * @access public
 	 */
-	public function test_import_table_mysql() {
-		$import = $this->import->import_table_mysql( 'wptests_posts' );
-		$this->assertEquals( true, $import );
-	}
-
-	/**
-	 * Tests the Revisr_DB_Import->import_table_wpdb method.
-	 * @access public
-	 */
-	public function test_import_table_wpdb() {
-		$import = $this->import->import_table_wpdb( 'wptests_posts' );
+	public function test_import_table() {
+		$import = $this->import->import_table( 'wptests_posts' );
 		$this->assertEquals( true, $import );
 	}
 

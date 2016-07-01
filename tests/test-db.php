@@ -17,35 +17,6 @@ class RevisrDBTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests the check_port_or_socket() function.
-	 */
-	function test_check_port_or_socket() {
-		// Checks for ports or sockets.
-		$no_port 	= $this->revisr->db->check_port_or_socket( 'localhost' );
-		$port 		= $this->revisr->db->check_port_or_socket( 'localhost:3306' );
-		$socket 	= $this->revisr->db->check_port_or_socket( 'localhost:/var/run/mysqld/mysqld.sock' );
-		$full_url 	= $this->revisr->db->check_port_or_socket( 'http://localhost:3306' );
-
-		// Runs the assertions.
-		$this->assertEquals( false, $no_port );
-
-		$this->assertArrayHasKey( 'port', $port );
-		$this->assertArrayHasKey( 'socket', $port );
-		$this->assertEquals( 3306, $port['port'] );
-		$this->assertEquals( null, $port['socket'] );
-
-		$this->assertArrayHasKey( 'port', $socket );
-		$this->assertArrayHasKey( 'socket', $socket );
-		$this->assertEquals( null, $socket['port'] );
-		$this->assertEquals( '/var/run/mysqld/mysqld.sock', $socket['socket'] );
-
-		$this->assertArrayHasKey( 'port', $full_url );
-		$this->assertArrayHasKey( 'socket', $full_url );
-		$this->assertEquals( 3306, $full_url['port'] );
-		$this->assertEquals( null, $full_url['socket'] );
-	}
-
-	/**
 	 * Tests the setup_env() method.
 	 */
 	function test_setup_env() {

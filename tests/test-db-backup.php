@@ -26,24 +26,11 @@ class Revisr_DB_Backup_Test extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests the Revisr_DB_Backup->backup_table_mysql() method.
+	 * Tests the Revisr_DB_Backup->backup_table() method.
 	 * @access public
 	 */
-	public function test_backup_table_mysql() {
-		$backup = $this->backup->backup_table_mysql( 'wptests_posts' );
-		$verify = $this->revisr->db->verify_backup( 'wptests_posts' );
-
-		$this->assertEquals( true, $backup );
-		$this->assertEquals( true, $verify );
-
-	}
-
-	/**
-	 * Tests the Revisr_DB_Backup->backup_table_wpdb() method.
-	 * @access public
-	 */
-	public function test_backup_table_wpdb() {
-		$backup = $this->backup->backup_table_wpdb( 'wptests_posts' );
+	public function test_backup_table() {
+		$backup = $this->backup->backup_table( 'wptests_posts' );
 		$verify = $this->revisr->db->verify_backup( 'wptests_posts' );
 
 		$this->assertEquals( true, $backup );
