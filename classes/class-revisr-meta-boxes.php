@@ -21,10 +21,13 @@ class Revisr_Meta_Boxes {
 	 */
 	public function add_meta_box_actions() {
 
-		do_action( 'add_meta_boxes_admin_page_revisr_new_commit', null );
-		do_action( 'add_meta_boxes', 'admin_page_revisr_new_commit', null );
-		do_action( 'add_meta_boxes_admin_page_revisr_view_commit', null );
-		do_action( 'add_meta_boxes', 'admin_page_revisr_view_commit', null );
+		$no_post = new stdClass();
+		$no_post->ID = 0;
+
+		do_action( 'add_meta_boxes_admin_page_revisr_new_commit', $no_post );
+		do_action( 'add_meta_boxes', 'admin_page_revisr_new_commit', $no_post );
+		do_action( 'add_meta_boxes_admin_page_revisr_view_commit', $no_post );
+		do_action( 'add_meta_boxes', 'admin_page_revisr_view_commit', $no_post );
 
 		wp_enqueue_script( 'postbox' );
 
