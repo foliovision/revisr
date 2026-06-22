@@ -223,7 +223,7 @@ class Revisr_Admin_Pages {
 	 */
 	public function admin_bar( $wp_admin_bar ) {
 
-		if ( revisr()->git->is_repo ) {
+		if ( current_user_can( Revisr::get_capability() ) && revisr()->git->is_repo ) {
 
 			$untracked = revisr()->git->count_untracked();
 
